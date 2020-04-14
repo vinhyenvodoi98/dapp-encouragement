@@ -7,7 +7,7 @@ import { E } from '@agoric/eventual-send'
 import harden from '@agoric/harden';
 
 import { makeZoe } from '@agoric/zoe';
-import produceIssuer from '@agoric/ERTP';
+import produceIssuer from '@agoric/ertp';
 import { makeGetInstanceHandle } from '@agoric/zoe/src/clientSupport';
 
 const contractPath = `${__dirname}/../src/contract`;
