@@ -1,0 +1,20 @@
+name: Lint and Test from Root
+
+# run CI on pushes to master, and on all PRs (even the ones that target other
+# branches)
+
+on:
+ push:
+   branches: [master]
+ pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: yarn install
+      run: yarn install  
+    - name: yarn build
+      run: yarn build
+    - name: yarn test (everything)
+      run: yarn test
