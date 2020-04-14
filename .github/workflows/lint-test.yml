@@ -21,7 +21,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: yarn install
-      run: yarn install  
+      # freezing the lockfile is generally faster
+      # https://help.github.com/en/actions/language-and-framework-guides/using-nodejs-with-github-actions?algolia-query=%20%20%20%20-%20uses:%20actions/checkout@v1#installing-dependencies
+      run: yarn --frozen-lockfile
     - name: yarn build
       run: yarn build
     - name: yarn test (everything)
