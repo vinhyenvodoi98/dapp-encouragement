@@ -61,6 +61,9 @@ export default async function deployApi(referencesPromise, { bundleSource, pathR
     // TODO: add more explanation
     http,
 
+    // The ibcport is an on-chain network port that we can use to listen on.
+    ibcport,
+
 
   }  = references;
 
@@ -101,7 +104,7 @@ export default async function deployApi(referencesPromise, { bundleSource, pathR
   const moolaIssuer = issuers.get('moola');
 
   const issuerKeywordRecord = harden({ Tip: moolaIssuer });
-  const adminInvite = await E(zoe).makeInstance(encouragementContractInstallationHandle, issuerKeywordRecord);
+  const adminInvite = await E(zoe).makeInstance(encouragementContractInstallationHandle, issuerKeywordRecord, { ibcport });
   console.log('- SUCCESS! contract instance is running on Zoe');
   
   // Let's get the Zoe invite issuer to be able to inspect our invite further
@@ -143,8 +146,11 @@ export default async function deployApi(referencesPromise, { bundleSource, pathR
   // contract in order to make an offer.
   const INSTANCE_REG_KEY = await E(registry).register(`${dappConstants.CONTRACT_NAME}instance`, instanceHandle);
 
+  const  IBC_ADDRESS = await E(ibcport).getLocalAddress();
+
   console.log(`-- Contract Name: ${dappConstants.CONTRACT_NAME}`);
   console.log(`-- InstanceHandle Register Key: ${INSTANCE_REG_KEY}`);
+  console.log(`-- IBC Address: ${IBC_ADDRESS}`);
 
   // We want the handler to run persistently. (Scripts such as this
   // deploy.js script are ephemeral and all connections to objects

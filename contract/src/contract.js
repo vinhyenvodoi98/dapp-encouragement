@@ -2,6 +2,7 @@
 import harden from '@agoric/harden';
 import { produceNotifier } from '@agoric/notifier';
 import { makeZoeHelpers } from '@agoric/zoe/src/contractSupport/zoeHelpers';
+import { E } from '@agoric/eventual-send';
 
 /**
  * This contract does a few interesting things.
@@ -17,6 +18,8 @@ export const makeContract = harden(zcf => {
   const { notifier, updater } = produceNotifier();
   let adminOfferHandle;
   const tipAmountMath = zcf.getAmountMaths(harden(['Tip'])).Tip;
+
+  const { terms: { ibcport } = {} } = zcf.getInstanceRecord();
 
   const { inviteAnOffer, rejectOffer } = makeZoeHelpers(zcf);
 
@@ -74,6 +77,35 @@ export const makeContract = harden(zcf => {
         customProperties: { inviteDesc: 'encouragement' },
       }),
     );
+
+  if (ibcport) {
+    // Set up a listener on our IBC port.
+    E(ibcport).addListener(
+      harden({
+        async onAccept(_port, _localAddr, remoteAddr, _listenHandler) {
+          // Start each new connection with a premium message.
+          let msg = messages.premium;
+          return harden({
+            async onOpen(connection) {
+              E(connection).send(
+                `Hi ${remoteAddr}! I'm the encouragement dapp!`,
+              );
+            },
+            async onReceive(_connection, _bytes) {
+              // Acknowledge every packet with a response.
+              if (!zcf.isOfferActive(adminOfferHandle)) {
+                return `Sorry, ${remoteAddr}: We are no longer giving encouragement.`;
+              }
+              const ack = `${remoteAddr}: ${msg}`;
+              // Just use the basic message from now on.
+              msg = messages.basic;
+              return ack;
+            },
+          });
+        },
+      }),
+    );
+  }
 
   return harden({
     invite: inviteAnOffer(

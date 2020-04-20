@@ -41,3 +41,15 @@ and after we click the "Encourage Me!" button:
 ## TODO
 
 Things we need to fix are listed in [the Github issues for this repository](https://github.com/Agoric/dapp-encouragement/issues).
+
+## Advanced
+
+For the hackathon: try the following at the REPL:
+
+```js
+a = []; c = home.ibcport~.connect('/ibc-port/port1', { onReceive(c, bytes) { a.push(bytes) } })
+a
+c~.send('hello!')
+c~.close()
+```
+
