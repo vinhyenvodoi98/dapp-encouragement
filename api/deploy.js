@@ -64,6 +64,9 @@ export default async function deployApi(referencesPromise, { bundleSource, pathR
     // TODO: add more explanation
     http,
 
+    // The ibcport is an on-chain network port that we can use to listen on.
+    ibcport,
+
 
   }  = references;
 
@@ -115,7 +118,7 @@ export default async function deployApi(referencesPromise, { bundleSource, pathR
   const TIP_BRAND_REGKEY = await E.G(E(wallet).getIssuerNames(tipIssuer)).brandRegKey;
 
   const issuerKeywordRecord = harden({ Tip: tipIssuer });
-  const adminInvite = await E(zoe).makeInstance(encouragementContractInstallationHandle, issuerKeywordRecord);
+  const adminInvite = await E(zoe).makeInstance(encouragementContractInstallationHandle, issuerKeywordRecord, { ibcport });
   console.log('- SUCCESS! contract instance is running on Zoe');
   
   // Let's get the Zoe invite issuer to be able to inspect our invite further
@@ -159,6 +162,7 @@ export default async function deployApi(referencesPromise, { bundleSource, pathR
 
   console.log(`-- Contract Name: ${CONTRACT_NAME}`);
   console.log(`-- InstanceHandle Register Key: ${INSTANCE_REG_KEY}`);
+  console.log(`-- IBC Address: ${IBC_ADDRESS}`);
   console.log(`-- TIP_BRAND_REGKEY: ${TIP_BRAND_REGKEY}`)
 
   // We want the handler to run persistently. (Scripts such as this
