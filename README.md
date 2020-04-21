@@ -46,10 +46,13 @@ Things we need to fix are listed in [the Github issues for this repository](http
 
 For the hackathon: try the following at the REPL:
 
+TODO: /ibc-hop/$MYCONNNAME/ibc-port/$THEIRPORT
+
 ```js
-a = []; c = home.ibcport~.connect('/ibc-port/port1', { onReceive(c, bytes) { a.push(bytes) } })
+a = []; c = home.ibcport~.connect('/ibc-port/portbvmnfb', { onReceive(c, bytes) { a.push(bytes) } })
 a
 c~.send('hello!')
+a
 c~.close()
 ```
 
