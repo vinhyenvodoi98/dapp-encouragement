@@ -56,3 +56,11 @@ a
 c~.close()
 ```
 
+How to run two solo vats for the same chain:
+
+```sh
+cd ~/agoric-sdk/packages/cosmic-swingset
+make NUM_SOLOS=2 scenario2-setup scenario2-run-chain
+make scenario2-run-client BASE_PORT=8000
+make scenario2-run-client BASE_PORT=8001
+```

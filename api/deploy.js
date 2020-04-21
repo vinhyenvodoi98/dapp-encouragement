@@ -160,6 +160,8 @@ export default async function deployApi(referencesPromise, { bundleSource, pathR
   // contract in order to make an offer.
   const INSTANCE_REG_KEY = await E(registry).register(`${CONTRACT_NAME}instance`, instanceHandle);
 
+  const IBC_ADDRESS = await E(ibcport).getLocalAddress();
+
   console.log(`-- Contract Name: ${CONTRACT_NAME}`);
   console.log(`-- InstanceHandle Register Key: ${INSTANCE_REG_KEY}`);
   console.log(`-- IBC Address: ${IBC_ADDRESS}`);
