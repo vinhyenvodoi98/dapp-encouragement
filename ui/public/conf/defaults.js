@@ -1,4 +1,4 @@
-  // GENERATED FROM /Users/katesills/code/dapp-encouragement/api/deploy.js
+  // GENERATED FROM /Users/michael/agoric/dapp-encouragement/api/deploy.js
   export default {
   "INSTANCE_REG_KEY": "encouragementinstance_5496",
   "CONTRACT_NAME": "encouragement",

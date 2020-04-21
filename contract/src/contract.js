@@ -91,15 +91,18 @@ export const makeContract = harden(zcf => {
                 `Hi ${remoteAddr}! I'm the encouragement dapp!`,
               );
             },
-            async onReceive(_connection, _bytes) {
+            async onReceive(connection, _bytes) {
               // Acknowledge every packet with a response.
               if (!zcf.isOfferActive(adminOfferHandle)) {
-                return `Sorry, ${remoteAddr}: We are no longer giving encouragement.`;
+                E(connection).send(
+                  `Sorry, ${remoteAddr}: We are no longer giving encouragement.`,
+                );
+                return 'nack';
               }
-              const ack = `${remoteAddr}: ${msg}`;
+              E(connection).send(`${remoteAddr}: ${msg}`);
               // Just use the basic message from now on.
               msg = messages.basic;
-              return ack;
+              return 'ack';
             },
           });
         },
