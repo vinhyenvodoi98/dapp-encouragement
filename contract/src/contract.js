@@ -91,7 +91,13 @@ export const makeContract = harden(zcf => {
                 `Hi ${remoteAddr}! I'm the encouragement dapp!`,
               );
             },
-            async onReceive(connection, _bytes) {
+            async onReceive(connection, bytes) {
+
+              // if (bytes.match(/.*attack.*/)) {
+              //   // throw new Error('Naughty attacker rejected');
+              //   return "NAUGHTY NAUGHTY";
+              // }
+              
               // Acknowledge every packet with a response.
               if (!zcf.isOfferActive(adminOfferHandle)) {
                 E(connection).send(

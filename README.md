@@ -49,11 +49,10 @@ For the hackathon: try the following at the REPL:
 TODO: /ibc-hop/$MYCONNNAME/ibc-port/$THEIRPORT
 
 ```js
-a = []; c = home.ibcport~.connect('/ibc-port/portbvmnfb', { onReceive(c, bytes) { a.push(bytes) } })
-a
-c~.send('hello!')
-a
-c~.close()
+c = home.ibcport[1]~.connect('/ibc-port/portbvmnfb', 
+          { onReceive(c, bytes) { console.log("Encourager says: ", bytes); } });
+c~.send('hello!');
+c~.close();
 ```
 
 How to run two solo vats for the same chain:
@@ -64,3 +63,30 @@ make NUM_SOLOS=2 scenario2-setup scenario2-run-chain
 make scenario2-run-client BASE_PORT=8000
 make scenario2-run-client BASE_PORT=8001
 ```
+
+How to run using the relayer!
+
+```
+./scripts/nchainz init ibc0=agoric ibc1=agoric ibc0:ibc1
+```
+Answer 'yes' to overrite, 'no' to run the relayer
+
+```sh
+./scripts/nchainz run
+```
+
+Deploy your contract. It will go to the ag-solo at port 8000.
+
+In the REPL for http://localhost:8001:
+```js
+c = E(home.ibcport[2]).connect('/ibc-hop/ibczerolink/ibc-port/portbvmnfb/ordered/demo1', 
+     { onReceive(c, bytes) { console.log("Encourager says: ", bytes); },
+       infoMessage(...msg) { console.log("IBC Connection Info: ", ...msg); } })
+```
+
+Copy the config to `~/.relayer/config/config.yaml`, especailly note the port names.
+
+```sh
+./scripts/nchainz relay
+```
+

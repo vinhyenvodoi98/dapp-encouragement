@@ -36,7 +36,7 @@ export default async function main() {
       }
       case 'walletURL': {
        // Change the form action to URL.
-       $encourageForm.action = `${obj.walletURL}`;
+       $encourageForm.action = `${obj.walletURL.replace('/wallet','')}`;
        break;
       }
     }
@@ -80,7 +80,7 @@ export default async function main() {
         });
       }
       if ($forTip.checked) {
-        $encourageForm.target = '_blank';
+        $encourageForm.target = 'wallet';
         const now = Date.now();
         const offer = {
           // JSONable ID for this offer.  This is scoped to the origin.

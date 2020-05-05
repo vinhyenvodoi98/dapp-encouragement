@@ -118,7 +118,8 @@ export default async function deployApi(referencesPromise, { bundleSource, pathR
   const TIP_BRAND_REGKEY = await E.G(E(wallet).getIssuerNames(tipIssuer)).brandRegKey;
 
   const issuerKeywordRecord = harden({ Tip: tipIssuer });
-  const adminInvite = await E(zoe).makeInstance(encouragementContractInstallationHandle, issuerKeywordRecord, { ibcport });
+  const ibcport0 = await E.G(ibcport)[0];
+  const adminInvite = await E(zoe).makeInstance(encouragementContractInstallationHandle, issuerKeywordRecord, { ibcport: ibcport0 });
   console.log('- SUCCESS! contract instance is running on Zoe');
   
   // Let's get the Zoe invite issuer to be able to inspect our invite further
@@ -160,7 +161,7 @@ export default async function deployApi(referencesPromise, { bundleSource, pathR
   // contract in order to make an offer.
   const INSTANCE_REG_KEY = await E(registry).register(`${CONTRACT_NAME}instance`, instanceHandle);
 
-  const IBC_ADDRESS = await E(ibcport).getLocalAddress();
+  const IBC_ADDRESS = await E(ibcport0).getLocalAddress();
 
   console.log(`-- Contract Name: ${CONTRACT_NAME}`);
   console.log(`-- InstanceHandle Register Key: ${INSTANCE_REG_KEY}`);
