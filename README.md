@@ -1,4 +1,4 @@
-# Encouragement Dapp
+# Encouragement Dapp (dIBC version)
 
 The Encouragement Dapp is the simplest [Agoric
 Dapp](https://agoric.com/documentation/dapps/). It
@@ -42,11 +42,9 @@ and after we click the "Encourage Me!" button:
 
 Things we need to fix are listed in [the Github issues for this repository](https://github.com/Agoric/dapp-encouragement/issues).
 
-## Advanced
+## IBC Demo
 
-For the hackathon: try the following at the REPL:
-
-TODO: /ibc-hop/$MYCONNNAME/ibc-port/$THEIRPORT
+Deploy your contract as described in the Dapps guide (https://agoric.com/documentation/dapps/). It will be installed on the Agoric VM at port 8000, then try the following at the REPL:
 
 ```js
 c = home.ibcport[1]~.connect('/ibc-port/portbvmnfb', 
@@ -55,7 +53,7 @@ c~.send('hello!');
 c~.close();
 ```
 
-How to run two solo vats for the same chain:
+How to run two VMs for the same chain:
 
 ```sh
 cd ~/agoric-sdk/packages/cosmic-swingset
@@ -64,29 +62,44 @@ make scenario2-run-client BASE_PORT=8000
 make scenario2-run-client BASE_PORT=8001
 ```
 
-How to run using the relayer!
+You should be able to deploy the contract to port 8000, and communicate with it on http://localhost:8001
+
+### Relayer
+
+This is a demo of communication between two independent chains.
+
+You first need to follow the above "Advanced" instructions to familiarise yourself with the demo and ensure you have all the prerequisites.
+
+Next, check out the relayer branch:
+
+```sh
+git clone git://github.com/iqlusioninc/relayer
+cd relayer
+git checkout jack/debuggin
+```
+
+Configure two Agoric chains with a link between them:
 
 ```
 ./scripts/nchainz init ibc0=agoric ibc1=agoric ibc0:ibc1
 ```
-Answer 'yes' to overrite, 'no' to run the relayer
+
+Answer 'yes' to overwrite, 'no' to run the relayer (you'll do that
+manually below).  Then start the chains:
 
 ```sh
 ./scripts/nchainz run
 ```
 
-Deploy your contract. It will go to the ag-solo at port 8000.
+Deploy your contract as described in the Dapps guide (https://agoric.com/documentation/dapps/). It will be installed on the Agoric VM at port 8000 (the first chain).
 
-In the REPL for http://localhost:8001:
+In the REPL for http://localhost:8001 (the second chain):
 ```js
 c = E(home.ibcport[2]).connect('/ibc-hop/ibczerolink/ibc-port/portbvmnfb/ordered/demo1', 
      { onReceive(c, bytes) { console.log("Encourager says: ", bytes); },
        infoMessage(...msg) { console.log("IBC Connection Info: ", ...msg); } })
 ```
 
-Copy the config to `~/.relayer/config/config.yaml`, especailly note the port names.
+Follow the instructions printed to execute the correct `ag-nchainz` command.  You should see the channel being established.
 
-```sh
-./scripts/nchainz relay
-```
-
+Return to the REPL, and you can send messages to the new channel as you did with the single-chain demo.
