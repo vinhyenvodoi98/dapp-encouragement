@@ -44,13 +44,15 @@ Things we need to fix are listed in [the Github issues for this repository](http
 
 ## IBC Demo
 
+### One Chain
+
 Deploy your contract as described in the Dapps guide (https://agoric.com/documentation/dapps/). It will be installed on the Agoric VM at port 8000, then try the following at the REPL:
 
 ```js
-c = home.ibcport[1]~.connect('/ibc-port/portbvmnfb', 
+c = E(home.ibcport[1]).connect('/ibc-port/portbvmnfb', 
           { onReceive(c, bytes) { console.log("Encourager says: ", bytes); } });
-c~.send('hello!');
-c~.close();
+E(c).send('hello!');
+E(c).close();
 ```
 
 How to run two VMs for the same chain:
@@ -68,7 +70,7 @@ You should be able to deploy the contract to port 8000, and communicate with it 
 
 This is a demo of communication between two independent chains.
 
-You first need to follow the above "Advanced" instructions to familiarise yourself with the demo and ensure you have all the prerequisites.
+You first should follow the above "One Chain" instructions to familiarise yourself with the demo and ensure you have all the prerequisites.
 
 Next, check out the relayer branch:
 
